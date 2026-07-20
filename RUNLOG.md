@@ -31,7 +31,14 @@
     - English: 100 ms delay at 2.0% interrupted turns (AUC 1.0)
     - Hindi: 100 ms delay at 3.0% interrupted turns (AUC 1.0)
 
+- **2026-07-21 (Run 8 — Approach 1 vs Approach 3 Final Comparison):**
+  - **Approach 1 (Pure Random Forest):** 
+    - Re-ran the original `approach1/train.py` on the combined dataset.
+    - English: 404 ms delay at 5.0% interrupted turns (AUC 0.982)
+    - Hindi: 220 ms delay at 4.0% interrupted turns (AUC 0.992)
+  - **Conclusion:** The `VotingClassifier` ensemble combined with the `<200ms` speech heuristic override in Approach 3 provided a massive performance boost over the solo Random Forest. English delay dropped from 404ms to an essentially instant 100ms!
+
 **Best scores to date (Approach 3 Heuristic Ensemble):**
-- English: **100 ms** (Run 7)
-- Hindi:   **100 ms** (Run 7)
+- English: **100 ms** (Run 7/8)
+- Hindi:   **100 ms** (Run 7/8)
 - Baseline: 1600 ms for both

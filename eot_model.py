@@ -98,25 +98,18 @@ def load_audio(path: str):
 
 
 def make_classifier() -> Pipeline:
-    rf = RandomForestClassifier(
-        n_estimators=50, max_depth=None, min_samples_split=5, class_weight="balanced", random_state=0
-    )
-    hgb = HistGradientBoostingClassifier(
-        max_iter=100, learning_rate=0.1, max_depth=6, random_state=0
-    )
-    mlp = MLPClassifier(
-        hidden_layer_sizes=(64, 32), max_iter=500, random_state=0
-    )
-    
-    ensemble = VotingClassifier(
-        estimators=[('rf', rf), ('hgb', hgb), ('mlp', mlp)],
-        voting='soft'
-    )
-    
     return Pipeline(
         steps=[
             ("scaler", StandardScaler()),
-            ("clf", ensemble),
+            (
+                "clf",
+                RandomForestClassifier(
+                    n_estimators=100,
+                    max_depth=6,
+                    class_weight="balanced",
+                    random_state=0,
+                ),
+            ),
         ]
     )
 
