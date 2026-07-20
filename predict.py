@@ -50,17 +50,17 @@ def main():
     model_path3 = os.path.join(args.model_dir, "eot_model3.pkl")
     model_path1 = os.path.join(args.model_dir, "eot_model.pkl")
 
-    if (args.force_model == "cnn" or not args.force_model) and os.path.exists(model_path_cnn):
-        from eot_cnn import load_cnn
-        model_obj = load_cnn(args.model_dir)
-        model_type = "cnn"
-        print(f"Loaded Approach 2 (CNN) from {args.model_dir}")
-    elif (args.force_model == "heuristic" or not args.force_model) and os.path.exists(model_path3):
+    if (args.force_model == "heuristic" or not args.force_model) and os.path.exists(model_path3):
         from eot_model3 import load_artifact, extract_features
         model_obj = load_artifact(args.model_dir)
         ext_fn = extract_features
         model_type = "heuristic"
         print(f"Loaded Approach 3 (Heuristic Ensemble) from {args.model_dir}")
+    elif (args.force_model == "cnn" or not args.force_model) and os.path.exists(model_path_cnn):
+        from eot_cnn import load_cnn
+        model_obj = load_cnn(args.model_dir)
+        model_type = "cnn"
+        print(f"Loaded Approach 2 (CNN) from {args.model_dir}")
     elif (args.force_model == "rf" or not args.force_model) and os.path.exists(model_path1):
         from eot_model import load_artifact, extract_features
         model_obj = load_artifact(args.model_dir)

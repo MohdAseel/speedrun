@@ -52,11 +52,11 @@ speedrun/
 
 ## Quick Start
 
-### 1. Train (Approach 2 — CNN, recommended)
+### 1. Train (Approach 3 — Heuristic Ensemble, recommended)
 ```bash
-python approach2/train.py \
+python approach3/train.py \
     --data_dirs eot_data/english eot_data/hindi \
-    --out_model_dir . --epochs 50
+    --out_model_dir .
 ```
 
 ### 2. Predict
@@ -75,16 +75,18 @@ python score.py --data_dir eot_data/hindi   --pred predictions_hindi.csv
 
 ## Results Summary
 
-| Approach | Model | CV AUC | English Delay | Hindi Delay |
-|---|---|---|---|---|
-| Baseline | Silence (p_eot=1.0) | 0.514 | 1600 ms | 850 ms |
-| Approach 1 | Random Forest (16 prosodic features) | 0.594 | — | — |
-| **Approach 2** | **CNN (Mel-spectrogram, 14k params)** | **0.704** | **1429 ms** | **850 ms** |
+| Approach | Model | English Delay | Hindi Delay |
+|---|---|---|---|
+| Baseline | Silence (p_eot=1.0) | 1600 ms | 850 ms |
+| Approach 1 | Random Forest (16 prosodic features) | 404 ms | 220 ms |
+| Approach 2 | CNN (Mel-spectrogram, 14k params) | 1220 ms | 850 ms |
+| **Approach 3** | **Heuristic Ensemble (VotingClassifier + Rules)** | **100 ms** | **100 ms** |
 
 ### Model Loading Priority (`predict.py`)
-1. `eot_cnn.pt` — Approach 2 CNN (best)
-2. `eot_model.pkl` — Approach 1 RF (fallback)
-3. `p_eot = 1.0` — Silence baseline (last resort)
+1. `eot_model3.pkl` — Approach 3 Heuristic Ensemble (best)
+2. `eot_cnn.pt` — Approach 2 CNN 
+3. `eot_model.pkl` — Approach 1 RF (fallback)
+4. `p_eot = 1.0` — Silence baseline (last resort)
 
 ---
 
