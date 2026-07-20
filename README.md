@@ -80,7 +80,7 @@ python score.py --data_dir eot_data/hindi   --pred predictions_hindi.csv
 | Baseline | Silence (p_eot=1.0) | 1600 ms | 850 ms |
 | Approach 1 | Random Forest (16 prosodic features) | 404 ms | 220 ms |
 | Approach 2 | CNN (Mel-spectrogram, 14k params) | 1220 ms | 850 ms |
-| **Approach 3** | **Heuristic Ensemble (VotingClassifier + Rules)** | **100 ms** | **100 ms** |
+| **Approach 3** | **Heuristic Ensemble (VotingClassifier + GridSearchCV + Rules)** | **100 ms** | **100 ms** |
 
 ### Model Loading Priority (`predict.py`)
 1. `eot_model3.pkl` — Approach 3 Heuristic Ensemble (best)
