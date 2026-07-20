@@ -1,3 +1,4 @@
 env/
 *Zone.Identifier
 eot_data/
+*.pyc
