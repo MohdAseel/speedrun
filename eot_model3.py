@@ -90,13 +90,9 @@ def extract_features(
 def load_audio(path: str):
     return load_wav(path)
 
-def make_classifier() -> HeuristicEnsemble:
-    rf = RandomForestClassifier(
-        n_estimators=100, max_depth=8, min_samples_split=5, class_weight="balanced", random_state=42
-    )
-    hgb = HistGradientBoostingClassifier(
-        max_iter=100, learning_rate=0.1, max_depth=6, random_state=42
-    )
+def make_classifier_pipeline() -> Pipeline:
+    rf = RandomForestClassifier(class_weight="balanced", random_state=42)
+    hgb = HistGradientBoostingClassifier(random_state=42)
     
     ensemble = VotingClassifier(
         estimators=[('rf', rf), ('hgb', hgb)],
@@ -110,7 +106,7 @@ def make_classifier() -> HeuristicEnsemble:
         ]
     )
     
-    return HeuristicEnsemble(pipeline)
+    return pipeline
 
 @dataclass
 class EOTArtifact:

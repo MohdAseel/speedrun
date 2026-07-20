@@ -7,7 +7,7 @@ import csv
 import random
 import numpy as np
 
-from eot_model3 import load_audio, extract_features, make_classifier, save_artifact
+from eot_model3 import load_audio, extract_features, save_artifact
 
 def main():
     ap = argparse.ArgumentParser()
@@ -44,11 +44,31 @@ def main():
     X = np.array(X)
     y = np.array(y)
 
-    print("Training Heuristic ML Ensemble...")
-    clf = make_classifier()
-    clf.fit(X, y)
+    from sklearn.model_selection import GridSearchCV
+    from eot_model3 import make_classifier_pipeline, HeuristicEnsemble
     
-    save_path = save_artifact(clf, args.out_model_dir)
+    print("Running GridSearchCV for Approach 3 Ensemble...")
+    pipeline = make_classifier_pipeline()
+    
+    # We test combinations of RF depth/estimators and HGB iterations/learning rate
+    param_grid = {
+        'clf__rf__n_estimators': [50, 100],
+        'clf__rf__max_depth': [None, 6, 8],
+        'clf__hgb__max_iter': [50, 100],
+        'clf__hgb__learning_rate': [0.05, 0.1]
+    }
+    
+    grid = GridSearchCV(pipeline, param_grid, cv=3, scoring='roc_auc', n_jobs=-1, verbose=1)
+    grid.fit(X, y)
+    
+    print(f"Best Hyperparameters: {grid.best_params_}")
+    print(f"Best Cross-Validation AUC: {grid.best_score_:.4f}")
+    
+    # Wrap the highly-optimized best estimator in our rule-based HeuristicEnsemble
+    final_model = HeuristicEnsemble(grid.best_estimator_)
+    final_model.fit(X, y)
+    
+    save_path = save_artifact(final_model, args.out_model_dir)
     print(f"Model successfully trained and saved to: {save_path}")
 
 if __name__ == "__main__":
